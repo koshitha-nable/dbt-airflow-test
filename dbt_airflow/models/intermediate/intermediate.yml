@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: int_customers
+    description: "generic testcase for intermediate customers table"
+
+    columns:
+      - name: customer_id
+        description: "The primary key for this customer table"
+        tests:
+          - unique
+          - not_null
+   
