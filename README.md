@@ -162,7 +162,7 @@ dbt docs generate
 This command generates HTML pages documenting the models, tests, and macros in your project.
 #####  2. Serve the documentation locally by running the following command: ##### 
 ```sh
-dbt docs serve
+dbt docs serve --port 8001
 ```
 This command starts a local web server to host the documentation. You can access it by opening your browser and visiting the provided URL.
 **Note**: Remember to generate the documentation before serving it.
