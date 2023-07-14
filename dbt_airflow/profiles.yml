@@ -1,0 +1,15 @@
+
+dbt_airflow:
+  outputs:
+
+    dev:
+      type: postgres
+      threads: 1
+      host: localhost
+      port: 5432
+      user: admin
+      pass: postgres
+      dbname: airflow_demo_db
+      schema: dev
+
+  target: dev
