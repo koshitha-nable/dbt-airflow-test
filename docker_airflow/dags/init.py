@@ -40,24 +40,34 @@ dbt_version = BashOperator(
 check_directory = BashOperator(
     task_id='check_dbt_directory',
     #bash_command='pwd',
-   bash_command='cd ../../dbt_airflow && dir',
+   bash_command='cd /dbt_airflow && ls',
     dag=dag,
 )
 
-dbt_debug = BashOperator(
-    task_id='test_connection',
-    #bash_command='pwd',
-   bash_command='cd ../../dbt_airflow && dbt debug --profiles-dir ../../dbt_airflow',
-    dag=dag,
-)
+# dbt_debug = BashOperator(
+#     task_id='test_connection',
+#     #bash_command='pwd',
+#    bash_command='cd /dbt_airflow && dbt debug --profiles-dir .',
+#     dag=dag,
+# )
 
 dbt_seed = BashOperator(
     task_id='load_csv',
     #bash_command='pwd',
-   bash_command='cd ../../dbt_airflow/seeds && dbt seed --profiles-dir .',
+   bash_command='cd /dbt_airflow && dbt seed  --profiles-dir .',
     dag=dag,
 )
 
-
-# Set up dependencies between tasks
-dbt_install >> dbt_version >> check_directory >> dbt_debug>> dbt_seed
+dbt_run = BashOperator(
+    task_id='transform_data',
+    #bash_command='pwd',
+   bash_command='cd /dbt_airflow && dbt run  --profiles-dir .',
+    dag=dag,
+)
+dbt_run = BashOperator(
+    task_id='test',
+    #bash_command='pwd',
+   bash_command='cd /dbt_airflow && dbt test  --profiles-dir .',
+    dag=dag,
+)
+dbt_install >> dbt_version >> check_directory >> dbt_seed
