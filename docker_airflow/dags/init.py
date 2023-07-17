@@ -35,7 +35,7 @@ def send_notification():
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
     smtp_username = 'savindukoshitha.a@gmail.com'
-    smtp_password = 'zljzyvrontzriaob'
+    smtp_password = ''
 
     # Email content
     subject = 'Airflow DAG Execution Failure'
