@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: src
-    database: airflow_demo_db 
+    database: dbt_demo_db 
     schema: dev_source
     tables:
       - name: customers
