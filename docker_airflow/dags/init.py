@@ -14,7 +14,7 @@ default_args = {
 }
 
 dag = DAG(
-    'dbt_airflow_init',
+    'dbt_airflow_sample',
     default_args=default_args,
     description='A simple dbt and Airflow init DAG',
     schedule_interval='@once',
@@ -22,13 +22,42 @@ dag = DAG(
 
 
 # Define dbt commands as bash commands
+dbt_install = BashOperator(
+    task_id='dbt_install',
+    #bash_command='pwd',
+   bash_command=' pip install dbt-postgres',
+    dag=dag,
+)
+
+# Define dbt commands as bash commands
+dbt_version = BashOperator(
+    task_id='dbt_version',
+    #bash_command='pwd',
+   bash_command='dbt --version',
+    dag=dag,
+)
+
+check_directory = BashOperator(
+    task_id='check_dbt_directory',
+    #bash_command='pwd',
+   bash_command='cd ../../dbt_airflow && dir',
+    dag=dag,
+)
+
+dbt_debug = BashOperator(
+    task_id='test_connection',
+    #bash_command='pwd',
+   bash_command='cd ../../dbt_airflow && dbt debug --profiles-dir ../../dbt_airflow',
+    dag=dag,
+)
+
 dbt_seed = BashOperator(
-    task_id='dbt_seed',
-   # bash_command='cd ../../dbt_airflow && dbt seed --profiles-dir .',
-   bash_command='pwd --profiles-dir .',
+    task_id='load_csv',
+    #bash_command='pwd',
+   bash_command='cd ../../dbt_airflow/seeds && dbt seed --profiles-dir .',
     dag=dag,
 )
 
 
 # Set up dependencies between tasks
-dbt_seed
+dbt_install >> dbt_version >> check_directory >> dbt_debug>> dbt_seed
