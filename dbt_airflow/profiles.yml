@@ -5,11 +5,11 @@ dbt_airflow:
     dev:
       type: postgres
       threads: 1
-      host: localhost
+      host: dbt-postgres
       port: 5432
       user: admin
       pass: postgres
-      dbname: airflow_demo_db
+      dbname: dbt_demo_db
       schema: dev
 
   target: dev
