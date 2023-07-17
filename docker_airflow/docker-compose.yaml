@@ -77,6 +77,8 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+    - ../dbt_airflow:/dbt_airflow
+
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -100,6 +102,18 @@ services:
       retries: 5
       start_period: 5s
     restart: always
+
+  dbt-postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=dbt_demo_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_HOST_AUTH_METHOD=trust # allow all connections without a password. This is *not* recommended for prod
+    volumes:
+      - ../dbt_airflow:/dbt_airflow
+    ports:
+      - "5432:5432"
 
   redis:
     image: redis:latest
@@ -294,6 +308,17 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+  # dbt:
+  #   container_name: dbt
+  #   build : .
+  #   image: dbt-postgres
+  #   volumes: 
+  #     - ./dbt_airflow:/../dbt_airflow/
+
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
 
 volumes:
   postgres-db-volume:
